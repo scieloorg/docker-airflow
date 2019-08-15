@@ -5,10 +5,10 @@ ENV AIRFLOW_GPL_UNIDECODE yes
 
 RUN apk add --no-cache --virtual .build-deps \
         make gcc g++ musl-dev linux-headers \
-    && apk add bash git openjdk8
+    && apk add bash git openjdk8 postgresql-dev
 
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir apache-airflow[s3]==01.10.4 \
+    && pip install --no-cache-dir apache-airflow[s3,celery,redis,postgres]==01.10.4 \
     && apk --purge del .build-deps
 
 RUN addgroup -S airflow \
