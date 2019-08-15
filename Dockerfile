@@ -4,9 +4,8 @@ ARG AIRFLOW_HOME=/usr/local/airflow
 ENV AIRFLOW_GPL_UNIDECODE yes
 
 RUN apk add --no-cache --virtual .build-deps \
-        make gcc libxml2-dev libxslt-dev musl-dev g++ \
-        libstdc++ linux-headers \
-    && apk add libxml2 libxslt sudo bash git openjdk8
+        make gcc g++ musl-dev linux-headers \
+    && apk add bash git openjdk8
 
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir apache-airflow[s3]==01.10.4 \
@@ -15,7 +14,6 @@ RUN pip install --no-cache-dir --upgrade pip \
 RUN addgroup -S airflow \
     && adduser -S airflow -G airflow -h ${AIRFLOW_HOME} \
     && chown -R airflow:airflow ${AIRFLOW_HOME}
-
 
 COPY --chown=airflow:airflow ./entrypoint.sh /entrypoint.sh
 
