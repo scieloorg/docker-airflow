@@ -3,14 +3,15 @@ FROM python:3.7-alpine3.10
 ARG AIRFLOW_HOME=/usr/local/airflow
 ENV AIRFLOW_GPL_UNIDECODE yes
 
+COPY requirements.txt requirements.txt
 
 RUN apk add --no-cache --virtual .build-deps \
         make gcc g++ musl-dev linux-headers  \
     && apk add bash git openjdk8 postgresql-dev gcc python3-dev musl-dev
 
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir apache-airflow[s3,postgres]==01.10.4 \
-    && pip install psycopg2 psycopg2-binary \
+    && pip install numpy==1.17.0 \
+    && pip install -r requirements.txt \
     && apk --purge del .build-deps
 
 RUN addgroup -S airflow \
