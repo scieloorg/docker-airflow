@@ -1,5 +1,9 @@
 FROM python:3.7-alpine3.10
 
+ARG UID=1000
+ARG GID=1000
+ARG UNAME=airflow
+ARG GNAME=airflow
 ARG AIRFLOW_HOME=/usr/local/airflow
 ENV AIRFLOW_GPL_UNIDECODE yes
 
@@ -14,13 +18,13 @@ RUN pip install --no-cache-dir --upgrade pip \
     && pip install -r requirements.txt \
     && apk --purge del .build-deps
 
-RUN addgroup -S airflow \
-    && adduser -S airflow -G airflow -h ${AIRFLOW_HOME} \
-    && chown -R airflow:airflow ${AIRFLOW_HOME}
+RUN addgroup -g ${GID} ${GNAME} \
+    && adduser -u ${UID} -G ${GNAME} -S ${UNAME} -h ${AIRFLOW_HOME} \
+    && chown -R ${UNAME}:${GNAME} ${AIRFLOW_HOME}
 
-COPY --chown=airflow:airflow ./entrypoint.sh /entrypoint.sh
+COPY --chown=${UNAME}:${GNAME} ./entrypoint.sh /entrypoint.sh
 
-USER airflow
+USER ${UNAME}
 WORKDIR ${AIRFLOW_HOME}
 
 ENV JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk
