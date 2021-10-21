@@ -8,7 +8,7 @@ alembic==1.2.1
 apache-airflow==1.10.12
 apispec==1.3.3
 attrs==19.3.0
-Babel==2.7.0
+Babel==2.9.1
 boto3==1.7.84
 botocore==1.10.84
 cached-property==1.5.1
